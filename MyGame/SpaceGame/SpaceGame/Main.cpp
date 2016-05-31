@@ -1,4 +1,4 @@
-/*****************************************************************************************
+﻿/*****************************************************************************************
 * Desc: Tutorial 02 IND_Surface
 *****************************************************************************************/
 
@@ -10,6 +10,18 @@
 /*
 ==================
 Main
+TASks:
+
+CHECK- да смените картинката на фона - background - на играта(можете да ползвате ресурсите в другия архив.)
+CHECK- на мястото на звездата горе в дясно да поставите 3 сърчица, които да служат като health-bar. Може да са 3 отделни елемента или една обща червена лента.
+- при натискането на клавиш от клавиатурата, да се премества позицията на единия герой. W –нагоре, A-наляво, S-надолу, D- надясно.
+- При достигане до края на екрана, героят да не може да продължи (ще проверите за колизии).
+- При колизия с края на екрана, намалете по едно сърчице от живота на героя
+
+
+
+
+
 ==================
 */
 int IndieLib()
@@ -25,11 +37,11 @@ int IndieLib()
 
 	// Loading Background
 	IND_Surface *mSurfaceBack = IND_Surface::newSurface();
-	if (!mI->_surfaceManager->add(mSurfaceBack, "../SpaceGame/resources/blue_background.jpg", IND_OPAQUE, IND_32)) return 0;
+	if (!mI->_surfaceManager->add(mSurfaceBack, "../SpaceGame/resources/EMN.jpg", IND_OPAQUE, IND_32)) return 0;
 
 	// Loading sprite of a star
 	IND_Surface *mSurfaceStar = IND_Surface::newSurface();
-	if (!mI->_surfaceManager->add(mSurfaceStar, "../SpaceGame/resources/star.png", IND_ALPHA, IND_32)) return 0;
+	if (!mI->_surfaceManager->add(mSurfaceStar, "../SpaceGame/resources/h.png", IND_ALPHA, IND_32)) return 0;
 
 	// ----- Animations loading -----
 
