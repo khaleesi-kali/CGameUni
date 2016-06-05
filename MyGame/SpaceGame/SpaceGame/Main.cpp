@@ -37,11 +37,22 @@ int IndieLib()
 
 	// Loading Background
 	IND_Surface *mSurfaceBack = IND_Surface::newSurface();
-	if (!mI->_surfaceManager->add(mSurfaceBack, "../SpaceGame/resources/EMN.jpg", IND_OPAQUE, IND_32)) return 0;
+	if (!mI->_surfaceManager->add(mSurfaceBack, "../SpaceGame/resources/skyyy.png", IND_OPAQUE, IND_32)) return 0;
 
-	// Loading sprite of a star
+	// Loading sprite of a star/heart1
 	IND_Surface *mSurfaceStar = IND_Surface::newSurface();
 	if (!mI->_surfaceManager->add(mSurfaceStar, "../SpaceGame/resources/h.png", IND_ALPHA, IND_32)) return 0;
+
+	//heart 2
+
+	IND_Surface *mSurfaceHeart = IND_Surface::newSurface();
+	if (!mI->_surfaceManager->add(mSurfaceHeart, "../SpaceGame/resources/h.png", IND_ALPHA, IND_32)) return 0;
+
+
+	//TEST
+
+	IND_Surface *mSurfaceCat = IND_Surface::newSurface();
+	if (!mI->_surfaceManager->add(mSurfaceCat, "../SpaceGame/resources/cats.png", IND_ALPHA, IND_32)) return 0;
 
 	// ----- Animations loading -----
 
@@ -50,8 +61,8 @@ int IndieLib()
 	if (!mI->_animationManager->addToSurface(mAnimationCharacter1, "../SpaceGame/resources/animations/character1.xml", IND_ALPHA, IND_32, 0, 48, 152)) return 0;
 
 	// Characters animations, we apply a color key of (0, 48, 152)
-	IND_Animation *mAnimationCharacter2 = IND_Animation::newAnimation();
-	if (!mI->_animationManager->addToSurface(mAnimationCharacter2, "../SpaceGame/resources/animations/character2.xml", IND_ALPHA, IND_32, 0, 48, 152)) return 0;
+	//IND_Animation *mAnimationCharacter2 = IND_Animation::newAnimation();
+	//if (!mI->_animationManager->addToSurface(mAnimationCharacter2, "../SpaceGame/resources/animations/character2.xml", IND_ALPHA, IND_32, 0, 48, 152)) return 0;
 
 	// Dust animation, we apply a color key of (255, 0, 255)
 	IND_Animation *mAnimationDust = IND_Animation::newAnimation();
@@ -64,10 +75,23 @@ int IndieLib()
 	mI->_entity2dManager->add(mBack);					// Entity adding
 	mBack->setSurface(mSurfaceBack);					// Set the surface into the entity
 
-	//star
+	//heart
 	IND_Entity2d *star = IND_Entity2d::newEntity2d();
 	mI->_entity2dManager->add(star);
 	star->setSurface(mSurfaceStar);
+
+	//heart2
+	IND_Entity2d *heart = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(heart);
+	heart->setSurface(mSurfaceStar);
+	//heart 2.1
+	IND_Entity2d *heart1 = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(heart1);
+	heart1->setSurface(mSurfaceHeart);
+	////////////////////tEST
+	IND_Entity2d *cat = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(cat);
+	cat->setSurface(mSurfaceCat);
 
 	// Character 1
 	IND_Entity2d *mPlayer1 = IND_Entity2d::newEntity2d();
@@ -75,9 +99,9 @@ int IndieLib()
 	mPlayer1->setAnimation(mAnimationCharacter1);				// Set the animation into the entity
 
 	// Character 2
-	IND_Entity2d *mPlayer2 = IND_Entity2d::newEntity2d();
-	mI->_entity2dManager->add(mPlayer2);					// Entity adding
-	mPlayer2->setAnimation(mAnimationCharacter2);				// Set the animation into the entity
+	//IND_Entity2d *mPlayer2 = IND_Entity2d::newEntity2d();
+	//mI->_entity2dManager->add(mPlayer2);					// Entity adding
+	//mPlayer2->setAnimation(mAnimationCharacter2);				// Set the animation into the entity
 
 	// Dust explosion
 	IND_Entity2d *mDust = IND_Entity2d::newEntity2d();
@@ -88,30 +112,70 @@ int IndieLib()
 
 	// Player 1
 	mPlayer1->setSequence(0);						// Choose sequence
-	mPlayer1->setPosition(140, 200, 0);
+	mPlayer1->setPosition(100, 350, 0);
 	mPlayer1->setMirrorX(1);						// Horizontal mirroring
 
 	// Dust explosion
-	mDust->setPosition(360, 250, 0);
+	mDust->setPosition(100, 420, 0);
+	
+	
 
 	// Player 2
-	mPlayer2->setSequence(0);						// Choose sequence
-	mPlayer2->setPosition(550, 200, 0);
-	mPlayer2->setNumReplays(3);						// The animation will be displayed 3 times
+	/*mPlayer2->setSequence(0);	*/					// Choose sequence
+	cat->setPosition(550, 450, 0);
+/*	mPlayer2->setNumReplays(3);	*/					// The animation will be displayed 3 times
 
 
-	//star
-	star->setPosition(mI->_window->getWidth() - mSurfaceStar->getWidth(), 0, 100);
+	//star = hearts
+	star->setPosition(100, 0, 30); //outer
+	heart->setPosition(0, 0, 40); //inner
+	heart1->setPosition(50,0,70); //middle
 	// ----- Main Loop -----
 
+
+	float mAngle = 0;
+	float mPosX = 100;
+	float mPosY = 350;
+	int mSpeed = 200;
+	float mDelta; // double
+
+	
 	while (!mI->_input->onKeyPress(IND_ESCAPE) && !mI->_input->quit())
 	{
+
 		mI->_input->update();
+		mPlayer1->setPosition((float)mPosX, (float)mPosY,1);
+		mDelta = mI->_render->getFrameTime() / 1000.0f;
+		if ((mI->_input->isKeyPressed(IND_W)))
+		{
+		
+			mPosY -= mSpeed * mDelta;
+		}
+		if ((mI->_input->isKeyPressed(IND_A)))
+		{
+			
+			mPosX -= mSpeed * mDelta;
+		}
+		if ((mI->_input->isKeyPressed(IND_S)))
+		{
+			
+			mPosY += mSpeed * mDelta;
+		}
+		if ((mI->_input->isKeyPressed(IND_D)))
+		{
+			mPosX += mSpeed * mDelta;
+		
+		
+		}
+		
+
 		// Toogle full screen when pressing "space"
 		//if (mI->_input->onKeyPress(IND_SPACE)) mI->_render->toggleFullScreen();
 		mI->_render->beginScene();
 		mI->_entity2dManager->renderEntities2d();
 		mI->_render->endScene();
+		mI->_render->showFpsInWindowTitle();
+	
 	}
 
 	// ----- Free -----

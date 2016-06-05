@@ -171,6 +171,8 @@ int IndieLib()
 		mI->_entity2dManager->renderEntities2d();
 		mI->_entity2dManager->renderCollisionAreas(255, 0, 0, 255);
 		mI->_render->endScene();	
+		mI->Render->ShowFpsInWindowTitle();
+	
 	}
 
 	// ----- Free -----

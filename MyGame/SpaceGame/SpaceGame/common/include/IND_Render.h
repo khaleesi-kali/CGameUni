@@ -116,6 +116,8 @@ public:
     /**@{*/
 	void beginScene();
 	void endScene();
+	
+
     /**@}*/
     
     /** @name Render settings
