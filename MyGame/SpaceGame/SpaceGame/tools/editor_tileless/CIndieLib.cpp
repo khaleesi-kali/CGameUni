@@ -72,7 +72,7 @@ bool CIndieLib::init() {
 	//_entity3dManager       =   new     IND_Entity3dManager;
 	_math                =   new     IND_Math;
 
-	IND_WindowProperties props ("IndieLib", 800, 600, 32, false, false,true);//example with different numbers, 0, 1, 23, -2333.
+	IND_WindowProperties props ("Sneako Atsume", 800, 600, 32, false, false,true);
 	
 	
 	_window = _render        ->initRenderAndWindow(props);                                 

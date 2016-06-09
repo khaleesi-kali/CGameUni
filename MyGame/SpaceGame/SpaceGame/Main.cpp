@@ -10,17 +10,8 @@
 /*
 ==================
 Main
-TASks:
 
-CHECK- да смените картинката на фона - background - на играта(можете да ползвате ресурсите в другия архив.)
-CHECK- на мястото на звездата горе в дясно да поставите 3 сърчица, които да служат като health-bar. Може да са 3 отделни елемента или една обща червена лента.
-- при натискането на клавиш от клавиатурата, да се премества позицията на единия герой. W –нагоре, A-наляво, S-надолу, D- надясно.
-- При достигане до края на екрана, героят да не може да продължи (ще проверите за колизии).
-- При колизия с края на екрана, намалете по едно сърчице от живота на героя
-
-
-
-
+WIP
 
 ==================
 */
@@ -39,18 +30,21 @@ int IndieLib()
 	IND_Surface *mSurfaceBack = IND_Surface::newSurface();
 	if (!mI->_surfaceManager->add(mSurfaceBack, "../SpaceGame/resources/skyyy.png", IND_OPAQUE, IND_32)) return 0;
 
+	//WALL THINGS
+	IND_Surface *mSurfaceGreen = IND_Surface::newSurface();
+	if (!mI->_surfaceManager->add(mSurfaceGreen, "../SpaceGame/resources/green.jpg", IND_ALPHA, IND_32)) return 0;
+	
+	IND_Surface *mSurfaceGreen1 = IND_Surface::newSurface();
+	if (!mI->_surfaceManager->add(mSurfaceGreen1, "../SpaceGame/resources/green.jpg", IND_ALPHA, IND_32)) return 0;
 	// Loading sprite of a star/heart1
 	IND_Surface *mSurfaceStar = IND_Surface::newSurface();
 	if (!mI->_surfaceManager->add(mSurfaceStar, "../SpaceGame/resources/h.png", IND_ALPHA, IND_32)) return 0;
 
 	//heart 2
-
 	IND_Surface *mSurfaceHeart = IND_Surface::newSurface();
 	if (!mI->_surfaceManager->add(mSurfaceHeart, "../SpaceGame/resources/h.png", IND_ALPHA, IND_32)) return 0;
-
-
+	
 	//TEST
-
 	IND_Surface *mSurfaceCat = IND_Surface::newSurface();
 	if (!mI->_surfaceManager->add(mSurfaceCat, "../SpaceGame/resources/cats.png", IND_ALPHA, IND_32)) return 0;
 
@@ -75,6 +69,15 @@ int IndieLib()
 	mI->_entity2dManager->add(mBack);					// Entity adding
 	mBack->setSurface(mSurfaceBack);					// Set the surface into the entity
 
+	//////////////////////////////////////////////////WALL
+	IND_Entity2d *green = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(green);
+	green->setSurface(mSurfaceGreen);
+
+	IND_Entity2d *green1 = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(green1);
+	green1->setSurface(mSurfaceGreen1);
+
 	//heart
 	IND_Entity2d *star = IND_Entity2d::newEntity2d();
 	mI->_entity2dManager->add(star);
@@ -88,6 +91,7 @@ int IndieLib()
 	IND_Entity2d *heart1 = IND_Entity2d::newEntity2d();
 	mI->_entity2dManager->add(heart1);
 	heart1->setSurface(mSurfaceHeart);
+
 	////////////////////tEST
 	IND_Entity2d *cat = IND_Entity2d::newEntity2d();
 	mI->_entity2dManager->add(cat);
@@ -104,40 +108,53 @@ int IndieLib()
 	//mPlayer2->setAnimation(mAnimationCharacter2);				// Set the animation into the entity
 
 	// Dust explosion
-	IND_Entity2d *mDust = IND_Entity2d::newEntity2d();
-	mI->_entity2dManager->add(mDust);					// Entity adding
-	mDust->setAnimation(mAnimationDust);					// Set the animation into the entity
+	//IND_Entity2d *mDust = IND_Entity2d::newEntity2d();
+	//mI->_entity2dManager->add(mDust);					// Entity adding
+	//mDust->setAnimation(mAnimationDust);					// Set the animation into the entity
 
-	// ----- Changing the attributes of the 2d entities -----
+	// ----- Changing the attributes of the 2d entities -----   false alarm
+	mBack->setPosition(0, 0, -10000000); //liololololddddd
+
+	//green
+	green->setPosition(0, 275, 5000);
+	green->setBoundingRectangle("green", 5, -328, 10, 800);
+
+	green1->setPosition(471, 275, 5000);
+	green1->setBoundingRectangle("green1", 310, -250, 10, 800); 
+	
+
+	//star = hearts
+	star->setPosition(100, 0, 30); //outer
+	heart->setPosition(0, 0, 40); //inner
+	heart1->setPosition(50, 0, 70); //middle
+
+	cat->setPosition(550, 450, 4);
+	cat->setBoundingCircle("cat", 50, 50, 55); 
 
 	// Player 1
 	mPlayer1->setSequence(0);						// Choose sequence
 	mPlayer1->setPosition(100, 350, 0);
 	mPlayer1->setMirrorX(1);						// Horizontal mirroring
-
+	mPlayer1->setBoundingRectangle("player", 5, -328, 200, 328);
 	// Dust explosion
-	mDust->setPosition(100, 420, 0);
+	//mDust->setPosition(40, 410, 0);
 	
-	
-
 	// Player 2
 	/*mPlayer2->setSequence(0);	*/					// Choose sequence
-	cat->setPosition(550, 450, 0);
-/*	mPlayer2->setNumReplays(3);	*/					// The animation will be displayed 3 times
+	/*mPlayer2->setNumReplays(3);	*/				// The animation will be displayed 3 times
 
 
-	//star = hearts
-	star->setPosition(100, 0, 30); //outer
-	heart->setPosition(0, 0, 40); //inner
-	heart1->setPosition(50,0,70); //middle
 	// ----- Main Loop -----
 
 
 	float mAngle = 0;
 	float mPosX = 100;
-	float mPosY = 350;
+	float mPosY = 440;
 	int mSpeed = 200;
 	float mDelta; // double
+	float mWidth = mPlayer1->getRegionWidth() / 2;
+	float mHeight = mPlayer1->getRegionHeight() / 2;
+	mPlayer1->setHotSpot(0.5f, 0.5f);
 
 	
 	while (!mI->_input->onKeyPress(IND_ESCAPE) && !mI->_input->quit())
@@ -146,6 +163,15 @@ int IndieLib()
 		mI->_input->update();
 		mPlayer1->setPosition((float)mPosX, (float)mPosY,1);
 		mDelta = mI->_render->getFrameTime() / 1000.0f;
+
+		if (mPosX + mWidth >= mI->_window->getWidth()-25) mPosX = mI->_window->getWidth()-25;
+		if (mPosX - mWidth< 50) mPosX = 50;
+		if (mPosY + mHeight >= mI->_window->getHeight()) mPosY = mI->_window->getHeight();
+		if (mPosY - mHeight < 0) mPosY = 0; 
+	//	if (mI->_entity2dManager->isCollision(mPlayer1, "player", green, "green")){
+	//		heart1->setShow(false);
+	//	}
+
 		if ((mI->_input->isKeyPressed(IND_W)))
 		{
 		
@@ -172,10 +198,11 @@ int IndieLib()
 		// Toogle full screen when pressing "space"
 		//if (mI->_input->onKeyPress(IND_SPACE)) mI->_render->toggleFullScreen();
 		mI->_render->beginScene();
+		mI->_render->clearViewPort(0, 0, 0); 
 		mI->_entity2dManager->renderEntities2d();
+		//mI->_render->showFpsInWindowTitle();
+		mI->_entity2dManager->renderCollisionAreas(255, 0, 0, 255);
 		mI->_render->endScene();
-		mI->_render->showFpsInWindowTitle();
-	
 	}
 
 	// ----- Free -----
