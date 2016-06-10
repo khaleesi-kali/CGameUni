@@ -196,7 +196,7 @@ int IndieLib()
 		if (mPosX + mWidth >= mI->_window->getWidth()-25) mPosX = mI->_window->getWidth()-25;
 		if (mPosX - mWidth< 50) mPosX = 50;
 		if (mPosY + mHeight >= mI->_window->getHeight()-100) mPosY = mI->_window->getHeight()-100;
-		if (mPosY - mHeight < 0) mPosY = 0; 
+		if (mPosY - mHeight < 100) mPosY = 100; 
 	if (mI->_entity2dManager->isCollision(mPlayer1, "player1", green, "green")){
 		star->setShow(false);
 	
