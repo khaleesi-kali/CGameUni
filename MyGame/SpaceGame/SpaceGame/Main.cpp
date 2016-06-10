@@ -32,10 +32,10 @@ int IndieLib()
 
 	//WALL THINGS
 	IND_Surface *mSurfaceGreen = IND_Surface::newSurface();
-	if (!mI->_surfaceManager->add(mSurfaceGreen, "../SpaceGame/resources/green.jpg", IND_ALPHA, IND_32)) return 0;
+	if (!mI->_surfaceManager->add(mSurfaceGreen, "../SpaceGame/resources/green.png", IND_ALPHA, IND_32)) return 0;
 	
 	IND_Surface *mSurfaceGreen1 = IND_Surface::newSurface();
-	if (!mI->_surfaceManager->add(mSurfaceGreen1, "../SpaceGame/resources/green.jpg", IND_ALPHA, IND_32)) return 0;
+	if (!mI->_surfaceManager->add(mSurfaceGreen1, "../SpaceGame/resources/green.png", IND_ALPHA, IND_32)) return 0;
 	// Loading sprite of a star/heart1
 	IND_Surface *mSurfaceStar = IND_Surface::newSurface();
 	if (!mI->_surfaceManager->add(mSurfaceStar, "../SpaceGame/resources/h.png", IND_ALPHA, IND_32)) return 0;
@@ -48,8 +48,20 @@ int IndieLib()
 	IND_Surface *mSurfaceCat = IND_Surface::newSurface();
 	if (!mI->_surfaceManager->add(mSurfaceCat, "../SpaceGame/resources/cats.png", IND_ALPHA, IND_32)) return 0;
 
-	// ----- Animations loading -----
+	//GAME OVER
+	IND_Surface *mSurfaceGame = IND_Surface::newSurface();
+	if (!mI->_surfaceManager->add(mSurfaceGame, "../SpaceGame/resources/gameover.png", IND_ALPHA, IND_32)) return 0;
+	
 
+	//TITLE
+	IND_Surface *mSneak = IND_Surface::newSurface();
+	if (!mI->_surfaceManager->add(mSneak, "../SpaceGame/resources/sneak1.png", IND_ALPHA, IND_32)) return 0;
+
+	//subtitle
+	IND_Surface *mSub = IND_Surface::newSurface();
+	if (!mI->_surfaceManager->add(mSub, "../SpaceGame/resources/dont.png", IND_ALPHA, IND_32)) return 0;
+
+	// ----- Animations loading -----
 	// Characters animations, we apply a color key of (0, 48, 152)
 	IND_Animation *mAnimationCharacter1 = IND_Animation::newAnimation();
 	if (!mI->_animationManager->addToSurface(mAnimationCharacter1, "../SpaceGame/resources/animations/character1.xml", IND_ALPHA, IND_32, 0, 48, 152)) return 0;
@@ -96,7 +108,22 @@ int IndieLib()
 	IND_Entity2d *cat = IND_Entity2d::newEntity2d();
 	mI->_entity2dManager->add(cat);
 	cat->setSurface(mSurfaceCat);
+	//game over
+	
+	IND_Entity2d *gamecat = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(gamecat);
+	gamecat->setSurface(mSurfaceGame);
 
+	//title
+	
+	IND_Entity2d *sneako = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(sneako);
+	sneako->setSurface(mSneak);
+
+	//sub mSub
+	IND_Entity2d *sub = IND_Entity2d::newEntity2d();
+	mI->_entity2dManager->add(sub);
+	sub->setSurface(mSub);
 	// Character 1
 	IND_Entity2d *mPlayer1 = IND_Entity2d::newEntity2d();
 	mI->_entity2dManager->add(mPlayer1);					// Entity adding
@@ -133,9 +160,9 @@ int IndieLib()
 
 	// Player 1
 	mPlayer1->setSequence(0);						// Choose sequence
-	mPlayer1->setPosition(100, 350, 0);
+//	mPlayer1->setPosition(100, 350, 5000);
 	mPlayer1->setMirrorX(1);						// Horizontal mirroring
-	mPlayer1->setBoundingRectangle("player", 5, -328, 200, 328);
+	//mPlayer1->setBoundingRectangle("player", 300, 20, 5, 475);
 	// Dust explosion
 	//mDust->setPosition(40, 410, 0);
 	
@@ -145,8 +172,10 @@ int IndieLib()
 
 
 	// ----- Main Loop -----
-
-
+	gamecat->setPosition(300, 100, 30);
+	gamecat->setShow(false);
+	sneako->setPosition(250, 50, 30);
+	sub->setPosition(350, 210, 30);
 	float mAngle = 0;
 	float mPosX = 100;
 	float mPosY = 440;
@@ -166,11 +195,31 @@ int IndieLib()
 
 		if (mPosX + mWidth >= mI->_window->getWidth()-25) mPosX = mI->_window->getWidth()-25;
 		if (mPosX - mWidth< 50) mPosX = 50;
-		if (mPosY + mHeight >= mI->_window->getHeight()) mPosY = mI->_window->getHeight();
+		if (mPosY + mHeight >= mI->_window->getHeight()-100) mPosY = mI->_window->getHeight()-100;
 		if (mPosY - mHeight < 0) mPosY = 0; 
-	//	if (mI->_entity2dManager->isCollision(mPlayer1, "player", green, "green")){
-	//		heart1->setShow(false);
-	//	}
+	if (mI->_entity2dManager->isCollision(mPlayer1, "player1", green, "green")){
+		star->setShow(false);
+	
+		}
+	if (mI->_entity2dManager->isCollision(mPlayer1, "player1", green1, "green1")){
+		heart->setShow(false);
+		gamecat->setShow(true);
+		mPlayer1->setShow(false);
+		cat->setShow(false);
+		sneako->setShow(false);
+		heart1->setShow(false);
+		star->setShow(false);
+		sub->setShow(false);
+	}
+	if (mI->_entity2dManager->isCollision(mPlayer1, "player1", cat, "cat")){
+		heart1->setShow(false);
+		
+
+	}
+	
+	/*if (heart1->isShow && heart->isShow = false && star->isShow = false){
+		mI->_render->endScene();
+	}*/
 
 		if ((mI->_input->isKeyPressed(IND_W)))
 		{
@@ -201,7 +250,7 @@ int IndieLib()
 		mI->_render->clearViewPort(0, 0, 0); 
 		mI->_entity2dManager->renderEntities2d();
 		//mI->_render->showFpsInWindowTitle();
-		mI->_entity2dManager->renderCollisionAreas(255, 0, 0, 255);
+		//mI->_entity2dManager->renderCollisionAreas(255, 0, 0, 255);
 		mI->_render->endScene();
 	}
 
